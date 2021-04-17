@@ -1,0 +1,41 @@
+{
+    "Actions": [
+      {
+        "Icon": "resources/actionIcon", 
+        "Name": "Weather",
+        "States": [
+          {
+            "Image": "resources/actionDefaultImage",
+            "TitleAlignment": "bottom",
+            "FontSize": "10"
+          }
+        ], 
+        "SupportedInMultiActions": true,
+        "Tooltip": "Get current weather",
+        "UUID": "com.jk.weather.action"
+      }
+    ], 
+    "SDKVersion": 2,
+    "Author": "Jaouher",
+    "CodePath": "plugin/main.html", 
+    "Description": "Easily get a preview about the weather",
+    "Name": "Weather",
+    "Icon": "resources/pluginIcon", 
+    "PropertyInspectorPath": "pi/main_pi.html",
+    "URL": "https://jk.com",
+    "Version": "2.0",
+    "OS": [
+      {
+          "Platform": "mac", 
+          "MinimumVersion" : "10.11"
+      },
+      {
+          "Platform": "windows", 
+          "MinimumVersion" : "10"
+      }
+    ],
+    "Software": 
+      {
+          "MinimumVersion" : "4.1"
+      }
+  }
