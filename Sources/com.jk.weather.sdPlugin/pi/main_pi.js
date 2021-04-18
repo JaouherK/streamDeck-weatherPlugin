@@ -42,6 +42,18 @@ function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegist
             if(document.getElementById('cityName').value === "undefined") {
                 document.getElementById('cityName').value = "";
             }
+
+            document.getElementById('frequency').value = payload.frequency;
+
+            if(document.getElementById('frequency').value === "undefined") {
+                document.getElementById('frequency').value = "0";
+            }
+
+            document.getElementById('unit').value = payload.unit;
+
+            if(document.getElementById('unit').value === "undefined") {
+                document.getElementById('unit').value = "celsius";
+            }
         }
         if (jsonObj.event === 'didReceiveGlobalSettings') {
             const payload = jsonObj.payload.settings;
@@ -59,18 +71,19 @@ function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegist
 
 }
 
-function updateCityName() {
+function updateSettings() {
     if (websocket && (websocket.readyState === 1)) {
         let payload = {};
         payload.cityName = document.getElementById('cityName').value;
+        payload.frequency = document.getElementById('frequency').value;
+        payload.unit = document.getElementById('unit').value;
         const json = {
             "event": "setSettings",
             "context": uuid,
             "payload": payload
         };
         websocket.send(JSON.stringify(json));
-        console.log(json)
-    }    
+    }
 }
 
 function updateApiKey() {
@@ -83,8 +96,7 @@ function updateApiKey() {
             "payload": payload
         };
         websocket.send(JSON.stringify(json));
-        console.log(json)
-    }    
+    }
 }
 
 function openPage(site) {

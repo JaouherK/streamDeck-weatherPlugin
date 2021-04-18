@@ -1,7 +1,7 @@
 
 # Description
 
-`Weather` is a plugin that displays a weather condition and temperature. It is connected to weatherApi provider and requires an API Key and a city as inputs.
+`Weather` is a plugin that displays a weather condition and temperature. It is connected to weatherApi provider and requires an API Key and a city as required inputs. It has also selection for frequency of fetching and temperature unit.
 
 # Features
 
