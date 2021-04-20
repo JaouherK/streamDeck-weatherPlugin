@@ -33,7 +33,7 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
                 jsonObj.payload.settings.hasOwnProperty('unit') &&
                 jsonObj.payload.settings.hasOwnProperty('frequency')
             ) {
-                cityName = jsonObj.payload.settings["cityName"];
+                cityName = jsonObj.payload.settings["cityName"].toLowerCase();
                 unit = jsonObj.payload.settings["unit"];
                 frequency = (jsonObj.payload.settings["frequency"] !== "0") ? parseInt(jsonObj.payload.settings["frequency"]) : false;
             }
@@ -68,58 +68,76 @@ function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, in
 
 
 function requestSending(context, cityName, unit) {
-    console.log('Sending');
     const request = new XMLHttpRequest();
     request.open("GET", 'https://api.weatherapi.com/v1/current.json?key=' + apiKey + '&q=' + cityName + '&aqi=no');
     request.send();
     request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
-            const response = JSON.parse(request.responseText);
-            let temperature = "";
-            if (unit === 'celsius') {
-                temperature = response.current.temp_c ? response.current.temp_c + "°C" : "NaN";
-            }
-            if (unit === 'fahrenheit') {
-                temperature = response.current.temp_f ? response.current.temp_f + "°F" : "NaN";
-            }
-            let json = {
-                "event": "setTitle",
-                "context": context,
-                "payload": {
-                    "title": "" + temperature,
-                    "target": 1
+            if (request.status === 200) {
+                const response = JSON.parse(request.responseText);
+                let temperature = "";
+                if (unit === 'celsius') {
+                    temperature = response.current.temp_c ? response.current.temp_c + "°C" : "NaN";
                 }
-            };
-
-            websocket.send(JSON.stringify(json));
-
-            function toDataURL(url, callback) {
-                let xhr = new XMLHttpRequest();
-                xhr.onload = function () {
-                    let reader = new FileReader();
-                    reader.onloadend = function () {
-                        callback(reader.result);
+                if (unit === 'fahrenheit') {
+                    temperature = response.current.temp_f ? response.current.temp_f + "°F" : "NaN";
+                }
+                let json = {
+                    "event": "setTitle",
+                    "context": context,
+                    "payload": {
+                        "title": "" + temperature,
+                        "target": 1
                     }
-                    reader.readAsDataURL(xhr.response);
                 };
-                xhr.open('GET', url);
-                xhr.responseType = 'blob';
-                xhr.send();
-            }
 
-            if (response.current.condition.icon != null) {
-                toDataURL("https:" + response.current.condition.icon, function (dataUrl) {
-                    let json = {
-                        "event": "setImage",
-                        "context": context,
-                        "payload": {
-                            "image": '' + dataUrl,
-                            "target": 1
+                websocket.send(JSON.stringify(json));
+
+                let json2 = {
+                    "event": "setTitle",
+                    "context": context,
+                    "payload": {
+                        "title": "" + cityName,
+                        "target": 2
+                    }
+                };
+
+                websocket.send(JSON.stringify(json2));
+
+                function toDataURL(url, callback) {
+                    let xhr = new XMLHttpRequest();
+                    xhr.onload = function () {
+                        let reader = new FileReader();
+                        reader.onloadend = function () {
+                            callback(reader.result);
                         }
+                        reader.readAsDataURL(xhr.response);
                     };
+                    xhr.open('GET', url);
+                    xhr.responseType = 'blob';
+                    xhr.send();
+                }
 
-                    websocket.send(JSON.stringify(json));
-                })
+                if (response.current.condition.icon != null) {
+                    toDataURL("https:" + response.current.condition.icon, function (dataUrl) {
+                        let json = {
+                            "event": "setImage",
+                            "context": context,
+                            "payload": {
+                                "image": '' + dataUrl,
+                                "target": 1
+                            }
+                        };
+
+                        websocket.send(JSON.stringify(json));
+                    })
+                }
+            } else {
+                const json = {
+                    "event": "showAlert",
+                    "context": context,
+                };
+                websocket.send(JSON.stringify(json));
             }
         }
     }

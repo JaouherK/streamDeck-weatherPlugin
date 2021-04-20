@@ -11,19 +11,19 @@
           }
         ], 
         "SupportedInMultiActions": true,
-        "Tooltip": "Get current weather",
+        "Tooltip": "Get current weather condition and temperature of a given city",
         "UUID": "com.jk.weather.action"
       }
     ], 
     "SDKVersion": 2,
-    "Author": "Jaouher",
+    "Author": "Jaouher Kharrat",
     "CodePath": "plugin/main.html", 
-    "Description": "Easily get a preview about the weather",
+    "Description": "Easily get a preview of the weather condition and the temperature of a given city.",
     "Name": "Weather",
     "Icon": "resources/pluginIcon", 
     "PropertyInspectorPath": "pi/main_pi.html",
-    "URL": "https://jk.com",
-    "Version": "2.0",
+    "URL": "https://github.com/JaouherK",
+    "Version": "2.0.1",
     "OS": [
       {
           "Platform": "mac", 
