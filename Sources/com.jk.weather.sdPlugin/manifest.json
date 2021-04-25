@@ -23,7 +23,7 @@
     "Icon": "resources/pluginIcon", 
     "PropertyInspectorPath": "pi/main_pi.html",
     "URL": "https://github.com/JaouherK",
-    "Version": "2.0.1",
+    "Version": "2.0.2",
     "OS": [
       {
           "Platform": "mac", 
