@@ -1,2 +1,5 @@
 # IntelliJ project files
 .idea
+
+# vscode project files
+.vscode

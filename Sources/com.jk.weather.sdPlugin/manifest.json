@@ -1,41 +1,40 @@
 {
-    "Actions": [
-      {
-        "Icon": "resources/actionIcon", 
-        "Name": "Weather",
-        "States": [
-          {
-            "Image": "resources/actionDefaultImage",
-            "TitleAlignment": "bottom",
-            "FontSize": "10"
-          }
-        ], 
-        "SupportedInMultiActions": true,
-        "Tooltip": "Get current weather condition and temperature of a given city",
-        "UUID": "com.jk.weather.action"
-      }
-    ], 
-    "SDKVersion": 2,
-    "Author": "Jaouher Kharrat",
-    "CodePath": "plugin/main.html", 
-    "Description": "Easily get a preview of the weather condition and the temperature of a given city.",
-    "Name": "Weather",
-    "Icon": "resources/pluginIcon", 
-    "PropertyInspectorPath": "pi/main_pi.html",
-    "URL": "https://github.com/JaouherK",
-    "Version": "2.0.2",
-    "OS": [
-      {
-          "Platform": "mac", 
-          "MinimumVersion" : "10.11"
-      },
-      {
-          "Platform": "windows", 
-          "MinimumVersion" : "10"
-      }
-    ],
-    "Software": 
-      {
-          "MinimumVersion" : "4.1"
-      }
+  "Actions": [
+    {
+      "Icon": "resources/actionIcon",
+      "Name": "Weather",
+      "States": [
+        {
+          "Image": "resources/actionDefaultImage",
+          "TitleAlignment": "bottom",
+          "FontSize": "10"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Get current weather condition and temperature of a given city",
+      "UUID": "com.jk.weather.action"
+    }
+  ],
+  "SDKVersion": 2,
+  "Author": "Jaouher Kharrat",
+  "CodePath": "plugin/main.html",
+  "Description": "Easily get a preview of the weather condition and the temperature of a given city.",
+  "Name": "Weather",
+  "Icon": "resources/pluginIcon",
+  "PropertyInspectorPath": "pi/main_pi.html",
+  "URL": "https://github.com/JaouherK",
+  "Version": "2.1.0",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.11"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "4.1"
   }
+}

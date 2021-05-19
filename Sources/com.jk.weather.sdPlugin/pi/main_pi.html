@@ -1,64 +1,96 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8"/>
+  <head>
+    <meta charset="utf-8" />
     <title>com.jk.weather.pi</title>
-    <link rel="stylesheet" href="sdpi.css">
+    <link rel="stylesheet" href="sdpi.css" />
     <script src="main_pi.js"></script>
-</head>
+  </head>
 
-<body>
-<div class="sdpi-wrapper hidden">
-    <div class="sdpi-item" id="apiProviderContainer">
+  <body>
+    <div class="sdpi-wrapper hidden">
+      <div class="sdpi-item" id="apiProviderContainer">
         <div class="sdpi-item-label">Provider</div>
-        <select class="sdpi-item-value select" id="api">
-            <option value="weatherApi">WeatherAPI</option>
+        <select
+          class="sdpi-item-value select"
+          id="provider"
+          onchange="updateGlobal()"
+        >
+          <option value="weatherApi">Weather API</option>
+          <option value="openWeatherMap">Open Weather</option>
         </select>
-    </div>
-    <div class="sdpi-item">
+      </div>
+      <div class="sdpi-item">
         <details class="message info">
-            <summary>Please do not set a title or an image for this plugin as they are being generated on the fly!</summary>
+          <summary>
+            Please do not set a title or an image for this plugin as they are
+            being generated on the fly!
+          </summary>
         </details>
-    </div>
+      </div>
 
-    <div class="sdpi-heading">API SETUP</div>
+      <div class="sdpi-heading">API SETUP</div>
 
-    <div class="sdpi-item">
+      <div class="sdpi-item">
         <div class="sdpi-item-label">API Key</div>
-        <input class="sdpi-item-value" id="apiKey" value="" onchange="updateApiKey()"
-               placeholder="Enter your WeatherApi Key" required>
-    </div>
-    <div class="sdpi-item">
+        <input
+          class="sdpi-item-value"
+          id="apiKey"
+          value=""
+          onchange="updateGlobal()"
+          placeholder="Enter your WeatherApi Key"
+          required
+        />
+      </div>
+      <div class="sdpi-item">
         <div class="sdpi-item-label">City Name</div>
-        <input class="sdpi-item-value" id="cityName" value="" onchange="updateSettings()"
-               placeholder="Enter the city for the current weather details" required>
-    </div>
+        <input
+          class="sdpi-item-value"
+          id="cityName"
+          value=""
+          onchange="updateSettings()"
+          placeholder="Enter the city for the current weather details"
+          required
+        />
+      </div>
 
-    <div class="sdpi-item">
+      <div class="sdpi-item">
         <div class="sdpi-item-label">Temperature</div>
-        <select class="sdpi-item-value select" id="unit" onchange="updateSettings()">
-            <option value="celsius">Celsius °C</option>
-            <option value="fahrenheit">Fahrenheit °F</option>
+        <select
+          class="sdpi-item-value select"
+          id="unit"
+          onchange="updateSettings()"
+        >
+          <option value="celsius">Celsius °C</option>
+          <option value="fahrenheit">Fahrenheit °F</option>
         </select>
-    </div>
+      </div>
 
-    <div class="sdpi-item">
+      <div class="sdpi-item">
         <div class="sdpi-item-label">Fetch frequency</div>
-        <select class="sdpi-item-value select" id="frequency" onchange="updateSettings()">
-            <option value="0">On push</option>
-            <option value="600000">10 Minutes</option>
-            <option value="1800000">30 Minutes</option>
-            <option value="3600000">1 Hour</option>
+        <select
+          class="sdpi-item-value select"
+          id="frequency"
+          onchange="updateSettings()"
+        >
+          <option value="0">On push</option>
+          <option value="600000">10 Minutes</option>
+          <option value="1800000">30 Minutes</option>
+          <option value="3600000">1 Hour</option>
         </select>
-    </div>
+      </div>
 
-    <div class="sdpi-item">
-        <button class="sdpi-item-value" onclick="openPage('weatherapi.com/my/')">Get my API key</button>
-        <button class="sdpi-item-value" onclick="openPage('github.com/JaouherK/streamDeck-weatherPlugin/issues/new?assignees=JaouherK&labels=bug&template=bug_report.md&title=Bug+report')">Report bug
+      <div class="sdpi-item">
+        <button class="sdpi-item-value" onclick="openPage(getProviderUrl())">
+          Get my API key
         </button>
+        <button
+          class="sdpi-item-value"
+          onclick="openPage('github.com/JaouherK/streamDeck-weatherPlugin/issues/new?assignees=JaouherK&labels=bug&template=bug_report.md&title=Bug+report')"
+        >
+          Report bug
+        </button>
+      </div>
     </div>
-</div>
-</body>
-
+  </body>
 </html>
