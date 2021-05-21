@@ -65,7 +65,7 @@ function connectElgatoStreamDeckSocket(
         jsonObj.payload.settings.hasOwnProperty("apiKey")
       ) {
         apiKey = jsonObj.payload.settings["apiKey"];
-        provider = jsonObj.payload.settings["provider"];
+        provider = jsonObj.payload.settings["provider"] || 'weatherApi';
       }
     } else if (jsonObj["event"] === "keyDown") {
       const json = {
