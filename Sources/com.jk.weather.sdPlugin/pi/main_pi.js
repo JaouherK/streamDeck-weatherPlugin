@@ -104,7 +104,7 @@ function openPage(site) {
 }
 
 function getProviderUrl() {
-  const provider = document.getElementById("provider").value;
+  const provider = document.getElementById("provider").value || 'weatherApi';
   let url;
   switch (provider) {
     case "weatherApi":
