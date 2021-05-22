@@ -81,6 +81,21 @@
       </div>
 
       <div class="sdpi-item">
+        <div class="sdpi-item-label">Display city name</div>
+        <select
+          class="sdpi-item-value select"
+          id="displayCity"
+          onchange="updateSettings()"
+        >
+          <option value="0">Hide</option>
+          <option value="1">Show in top left</option>
+          <option value="2">Show in top right</option>
+          <option value="3">Show in bottom left</option>
+          <option value="4">Show in bottom right</option>
+        </select>
+      </div>
+
+      <div class="sdpi-item">
         <button class="sdpi-item-value" onclick="openPage(getProviderUrl())">
           Get my API key
         </button>

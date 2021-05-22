@@ -32,7 +32,9 @@ function connectElgatoStreamDeckSocket(
     if (jsonObj["event"] === "keyUp") {
       let cityName = "";
       let unit = "";
+      let displayCity = 0;
       let frequency = null;
+
       if (
         jsonObj.payload.settings != null &&
         jsonObj.payload.settings.hasOwnProperty("cityName") &&
@@ -41,6 +43,7 @@ function connectElgatoStreamDeckSocket(
       ) {
         cityName = jsonObj.payload.settings["cityName"].toLowerCase();
         unit = jsonObj.payload.settings["unit"];
+        displayCity = jsonObj.payload.settings["displayCity"];
         frequency =
           jsonObj.payload.settings["frequency"] !== "0"
             ? parseInt(jsonObj.payload.settings["frequency"])
@@ -54,9 +57,12 @@ function connectElgatoStreamDeckSocket(
         };
         websocket.send(JSON.stringify(json));
       } else {
-        sendRequest(context, cityName, unit);
+        sendRequest(context, cityName, displayCity, unit);
         if (frequency) {
-          setInterval(() => sendRequest(context, cityName, unit), frequency);
+          setInterval(
+            () => sendRequest(context, cityName, displayCity, unit),
+            frequency
+          );
         }
       }
     } else if (jsonObj["event"] === "didReceiveGlobalSettings") {
@@ -65,7 +71,7 @@ function connectElgatoStreamDeckSocket(
         jsonObj.payload.settings.hasOwnProperty("apiKey")
       ) {
         apiKey = jsonObj.payload.settings["apiKey"];
-        provider = jsonObj.payload.settings["provider"] || 'weatherApi';
+        provider = jsonObj.payload.settings["provider"] || "weatherApi";
       }
     } else if (jsonObj["event"] === "keyDown") {
       const json = {
@@ -115,7 +121,7 @@ function prepareTemperature(response, unit) {
   return temp;
 }
 
-function setImageAndCity(response, context, city) {
+function setImageAndCity(response, context, city, displayCity) {
   let url;
   const defaultImg =
     "https://raw.githubusercontent.com/JaouherK/streamDeck-weatherPlugin/master/Sources/com.jk.weather.sdPlugin/resources/actionIcon.png";
@@ -135,7 +141,7 @@ function setImageAndCity(response, context, city) {
           : defaultImg;
       break;
   }
-  dataFromCanvasDraw(url, city, (dataUrl) => {
+  dataFromCanvasDraw(url, city, displayCity, (dataUrl) => {
     let json = {
       event: "setImage",
       context,
@@ -149,7 +155,7 @@ function setImageAndCity(response, context, city) {
   return url;
 }
 
-function sendRequest(context, cityName, unit) {
+function sendRequest(context, cityName, displayCity, unit) {
   const request = new XMLHttpRequest();
   const url = prepareUrl(cityName, unit);
   request.open("GET", url);
@@ -170,7 +176,7 @@ function sendRequest(context, cityName, unit) {
 
         websocket.send(JSON.stringify(jsonDeck));
 
-        setImageAndCity(response, context, cityName);
+        setImageAndCity(response, context, cityName, displayCity);
       } else {
         const json = {
           event: "showAlert",
@@ -182,13 +188,13 @@ function sendRequest(context, cityName, unit) {
   };
 }
 
-function dataFromCanvasDraw(url, city, callback) {
+function dataFromCanvasDraw(url, city, displayCity = 0, callback) {
   const canvas = document.getElementById("idCanvas");
   const context = canvas.getContext("2d");
   let imageObj = new Image();
   imageObj.setAttribute("crossOrigin", "anonymous");
 
-  imageObj.onload = ((city) => {
+  imageObj.onload = ((city, displayCity) => {
     const canvas = document.getElementById("idCanvas");
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.drawImage(
@@ -197,16 +203,36 @@ function dataFromCanvasDraw(url, city, callback) {
       0,
       imageObj.width,
       imageObj.height,
-      0,
-      0,
-      canvas.width,
-      canvas.height
+      5,
+      10,
+      canvas.width - 10,
+      canvas.height - 20
     );
-    context.font = "small-caps bold 13px Arial";
-    context.fillStyle = "white";
-    context.fillText(city, 65, 13);
+    if (displayCity !== 0) {
+      context.font = "small-caps bold 13px Arial";
+      context.fillStyle = "white";
+      let align = "right";
+      let x = 65;
+      let y = 13;
+      switch (displayCity) {
+        case 1:
+          x = 10;
+          align = "left";
+          break;
+        case 3:
+          x = 10;
+          y = 65;
+          align = "left";
+          break;
+        case 4:
+          y = 65;
+          break;
+      }
+      context.textAlign = align;
+      context.fillText(city, x, y);
+    }
     const dataURL = canvas.toDataURL();
     callback(dataURL);
-  }).bind(this, city);
+  }).bind(this, city, displayCity);
   imageObj.src = url;
 }
