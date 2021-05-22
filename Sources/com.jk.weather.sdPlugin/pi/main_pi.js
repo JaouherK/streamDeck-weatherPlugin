@@ -42,6 +42,7 @@ function connectElgatoStreamDeckSocket(
       const payload = jsonObj.payload.settings;
       initiateElement("cityName", payload.cityName);
       initiateElement("frequency", payload.frequency, 0);
+      initiateElement("displayCity", payload.displayCity, 0);
       initiateElement("unit", payload.unit, "celsius");
     }
     if (jsonObj.event === "didReceiveGlobalSettings") {
@@ -68,6 +69,9 @@ function updateSettings() {
     payload.cityName = document.getElementById("cityName").value;
     payload.frequency = document.getElementById("frequency").value;
     payload.unit = document.getElementById("unit").value;
+    payload.displayCity = parseInt(
+      document.getElementById("displayCity").value
+    );
     const json = {
       event: "setSettings",
       context: uuid,
@@ -104,7 +108,7 @@ function openPage(site) {
 }
 
 function getProviderUrl() {
-  const provider = document.getElementById("provider").value || 'weatherApi';
+  const provider = document.getElementById("provider").value || "weatherApi";
   let url;
   switch (provider) {
     case "weatherApi":
