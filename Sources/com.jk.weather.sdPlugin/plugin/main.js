@@ -42,6 +42,7 @@ function connectElgatoStreamDeckSocket(
         jsonObj.payload.settings.hasOwnProperty("unit") &&
         jsonObj.payload.settings.hasOwnProperty("frequency") &&
         jsonObj.payload.settings.hasOwnProperty("roundDegree")
+
       ) {
         cityName = jsonObj.payload.settings["cityName"].toLowerCase();
         unit = jsonObj.payload.settings["unit"];
@@ -63,8 +64,7 @@ function connectElgatoStreamDeckSocket(
         sendRequest(context, cityName, displayCity, unit, roundDegree);
         if (frequency) {
           setInterval(
-            () =>
-              sendRequest(context, cityName, displayCity, unit, roundDegree),
+            () => sendRequest(context, cityName, displayCity, unit, roundDegree),
             frequency
           );
         }
@@ -107,31 +107,25 @@ function prepareTemperature(response, unit, roundDegree) {
   switch (provider) {
     case "weatherApi":
       if (unit === "celsius") {
-        temp = response.current.temp_c
-          ? (roundDegree
-              ? response.current.temp_c.toFixed(0)
-              : response.current.temp_c) + "°C"
+        temp = response.current.temp_c 
+          ? response.current.temp_c.toFixed(roundDegree ? 0 : 2) + "°C" 
           : "NaN";
       }
       if (unit === "fahrenheit") {
-        temp = response.current.temp_f
-          ? (roundDegree
-              ? response.current.temp_f.toFixed(0)
-              : response.current.temp_f) + "°F"
+        temp = response.current.temp_f 
+          ? response.current.temp_f.toFixed(roundDegree ? 0 : 2) + "°F" 
           : "NaN";
       }
       break;
     case "openWeatherMap":
       if (unit === "celsius") {
-        temp = response.main.temp
-          ? (roundDegree ? response.main.temp.toFixed(0) : response.main.temp) +
-            "°C"
+        temp = response.main.temp 
+          ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°C" 
           : "NaN";
       }
       if (unit === "fahrenheit") {
         temp = response.main.temp
-          ? (roundDegree ? response.main.temp.toFixed(0) : response.main.temp) +
-            "°F"
+          ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°F"
           : "NaN";
       }
       break;
