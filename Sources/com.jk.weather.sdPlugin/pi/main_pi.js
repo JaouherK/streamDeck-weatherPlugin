@@ -44,6 +44,7 @@ function connectElgatoStreamDeckSocket(
       initiateElement("frequency", payload.frequency, 0);
       initiateElement("displayCity", payload.displayCity, 0);
       initiateElement("unit", payload.unit, "celsius");
+      initiateElement("roundDegree", payload.roundDegree, "true");
     }
     if (jsonObj.event === "didReceiveGlobalSettings") {
       const payload = jsonObj.payload.settings;
@@ -69,6 +70,7 @@ function updateSettings() {
     payload.cityName = document.getElementById("cityName").value;
     payload.frequency = document.getElementById("frequency").value;
     payload.unit = document.getElementById("unit").value;
+    payload.roundDegree = document.getElementById("roundDegree").value;
     payload.displayCity = parseInt(
       document.getElementById("displayCity").value
     );

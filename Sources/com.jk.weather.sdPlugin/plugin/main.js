@@ -33,17 +33,20 @@ function connectElgatoStreamDeckSocket(
       let cityName = "";
       let unit = "";
       let displayCity = 0;
+      let roundDegree = true;
       let frequency = null;
 
       if (
         jsonObj.payload.settings != null &&
         jsonObj.payload.settings.hasOwnProperty("cityName") &&
         jsonObj.payload.settings.hasOwnProperty("unit") &&
-        jsonObj.payload.settings.hasOwnProperty("frequency")
+        jsonObj.payload.settings.hasOwnProperty("frequency") &&
+        jsonObj.payload.settings.hasOwnProperty("roundDegree")
       ) {
         cityName = jsonObj.payload.settings["cityName"].toLowerCase();
         unit = jsonObj.payload.settings["unit"];
         displayCity = jsonObj.payload.settings["displayCity"];
+        roundDegree = jsonObj.payload.settings["roundDegree"] === "true";
         frequency =
           jsonObj.payload.settings["frequency"] !== "0"
             ? parseInt(jsonObj.payload.settings["frequency"])
@@ -57,10 +60,11 @@ function connectElgatoStreamDeckSocket(
         };
         websocket.send(JSON.stringify(json));
       } else {
-        sendRequest(context, cityName, displayCity, unit);
+        sendRequest(context, cityName, displayCity, unit, roundDegree);
         if (frequency) {
           setInterval(
-            () => sendRequest(context, cityName, displayCity, unit),
+            () =>
+              sendRequest(context, cityName, displayCity, unit, roundDegree),
             frequency
           );
         }
@@ -98,23 +102,37 @@ function prepareUrl(cityName, unit) {
   return url;
 }
 
-function prepareTemperature(response, unit) {
+function prepareTemperature(response, unit, roundDegree) {
   let temp;
   switch (provider) {
     case "weatherApi":
       if (unit === "celsius") {
-        temp = response.current.temp_c ? response.current.temp_c + "°C" : "NaN";
+        temp = response.current.temp_c
+          ? (roundDegree
+              ? response.current.temp_c.toFixed(0)
+              : response.current.temp_c) + "°C"
+          : "NaN";
       }
       if (unit === "fahrenheit") {
-        temp = response.current.temp_f ? response.current.temp_f + "°F" : "NaN";
+        temp = response.current.temp_f
+          ? (roundDegree
+              ? response.current.temp_f.toFixed(0)
+              : response.current.temp_f) + "°F"
+          : "NaN";
       }
       break;
     case "openWeatherMap":
       if (unit === "celsius") {
-        temp = response.main.temp ? response.main.temp + "°C" : "NaN";
+        temp = response.main.temp
+          ? (roundDegree ? response.main.temp.toFixed(0) : response.main.temp) +
+            "°C"
+          : "NaN";
       }
       if (unit === "fahrenheit") {
-        temp = response.main.temp ? response.main.temp + "°F" : "NaN";
+        temp = response.main.temp
+          ? (roundDegree ? response.main.temp.toFixed(0) : response.main.temp) +
+            "°F"
+          : "NaN";
       }
       break;
   }
@@ -155,7 +173,7 @@ function setImageAndCity(response, context, city, displayCity) {
   return url;
 }
 
-function sendRequest(context, cityName, displayCity, unit) {
+function sendRequest(context, cityName, displayCity, unit, roundDegree) {
   const request = new XMLHttpRequest();
   const url = prepareUrl(cityName, unit);
   request.open("GET", url);
@@ -164,7 +182,7 @@ function sendRequest(context, cityName, displayCity, unit) {
     if (request.readyState === XMLHttpRequest.DONE) {
       if (request.status === 200) {
         const response = JSON.parse(request.responseText);
-        const temperature = prepareTemperature(response, unit);
+        const temperature = prepareTemperature(response, unit, roundDegree);
 
         let jsonDeck = {
           event: "setTitle",
