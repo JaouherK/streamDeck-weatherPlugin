@@ -1,7 +1,7 @@
 
 # Weather
 
-[![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/JaouherK/a489177df4f24946281bdc1b21524b13/raw/62c6d31dc218a9c26d4dbe62c430bf46914bf6a3/weatherMetaData.json)](https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.1.1)
+[![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/JaouherK/a489177df4f24946281bdc1b21524b13/raw/79aacf61a7e32fe2e597f3f1980df1029d54894a/weatherMetaData.json)](https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.1.2)
 
 `Weather` is a plugin that displays the weather condition as a picture image, the city name and the temperature of a given location. It is connected to multiple providers and needs an API Key to connect.
 
@@ -23,6 +23,8 @@ The button is configured as follows:
 - City Name: the city for which the information will be displayed on the button
 - Temperature: the temperature unit ( Celsius or Fahrenheit)
 - Fetch frequency: how often the data is updated (beware for free accounts the limits set by the provider)
+- Display city name: Provides the possibility choose where to display the city name (also if we need to hide it)
+- Round to nearest degree: Provides the possibility to show / hide digits after decimal point
 - "Get my API key" button: to retrieve the key for your account
 - "Report bug" button: to report a bug
 
@@ -33,6 +35,7 @@ The button is configured as follows:
 - Choice of Weather provider
 - Choose temperature unit
 - choose fetching frequency of the weather data
+- Weather condition icon fit to display
 
 ![screen](screenshot.png)
 

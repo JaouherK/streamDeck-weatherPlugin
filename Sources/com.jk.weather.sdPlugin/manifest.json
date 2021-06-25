@@ -18,12 +18,12 @@
   "SDKVersion": 2,
   "Author": "Jaouher Kharrat",
   "CodePath": "plugin/main.html",
-  "Description": "Easily get a preview of the weather condition and the temperature of a given city.",
+  "Description": "Get current weather condition and temperature of a given city",
   "Name": "Weather",
   "Icon": "resources/pluginIcon",
   "PropertyInspectorPath": "pi/main_pi.html",
   "URL": "https://github.com/JaouherK",
-  "Version": "2.1.1",
+  "Version": "2.1.2",
   "OS": [
     {
       "Platform": "mac",

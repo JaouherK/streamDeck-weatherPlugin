@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2020-06-25
+
+### Added
+
+- New setting to round to nearest integer value of temperature by @thepaulstella
+
+### Changed
+
+- Force load settings on page start
+- Update screenshot
+
 ## [2.1.1] - 2020-05-23
 
 ### Added
@@ -83,3 +94,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.0.2]: https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.0.2
 [2.1.0]: https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.1.0
 [2.1.1]: https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.1.1
+[2.1.2]: https://github.com/JaouherK/streamDeck-weatherPlugin/releases/tag/v2.1.2
