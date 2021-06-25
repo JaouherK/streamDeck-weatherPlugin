@@ -96,6 +96,18 @@
       </div>
 
       <div class="sdpi-item">
+        <div class="sdpi-item-label">Round to closest degree</div>
+        <select
+          class="sdpi-item-value select"
+          id="roundDegree"
+          onchange="updateSettings()"
+        >
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+
+      <div class="sdpi-item">
         <button class="sdpi-item-value" onclick="openPage(getProviderUrl())">
           Get my API key
         </button>
