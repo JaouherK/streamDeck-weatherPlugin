@@ -107,24 +107,24 @@ function prepareTemperature(response, unit, roundDegree) {
   switch (provider) {
     case "weatherApi":
       if (unit === "celsius") {
-        temp = response.current.temp_c 
+        temp = response.current.temp_c != null
           ? response.current.temp_c.toFixed(roundDegree ? 0 : 2) + "°C" 
           : "NaN";
       }
       if (unit === "fahrenheit") {
-        temp = response.current.temp_f 
+        temp = response.current.temp_f != null
           ? response.current.temp_f.toFixed(roundDegree ? 0 : 2) + "°F" 
           : "NaN";
       }
       break;
     case "openWeatherMap":
       if (unit === "celsius") {
-        temp = response.main.temp 
+        temp = response.main.temp != null
           ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°C" 
           : "NaN";
       }
       if (unit === "fahrenheit") {
-        temp = response.main.temp
+        temp = response.main.temp != null
           ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°F"
           : "NaN";
       }
