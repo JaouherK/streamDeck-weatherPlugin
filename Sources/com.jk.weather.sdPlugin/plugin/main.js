@@ -3,6 +3,8 @@ let websocket = null,
   apiKey = "",
   provider = "";
 
+const buttons = [];
+
 function connectElgatoStreamDeckSocket(
   inPort,
   inPluginUUID,
@@ -28,47 +30,17 @@ function connectElgatoStreamDeckSocket(
     // Received message from Stream Deck
     const jsonObj = JSON.parse(evt.data);
     const context = jsonObj["context"];
-
+    if (jsonObj["event"] === "willAppear") {
+      // Register buttons
+      buttons.push({
+        context: context,
+        jsonObj: jsonObj
+      })
+      // Initialize with get GlobalSettings
+      getGlobalSettings()
+    }
     if (jsonObj["event"] === "keyUp") {
-      let cityName = "";
-      let unit = "";
-      let displayCity = 0;
-      let roundDegree = true;
-      let frequency = null;
-
-      if (
-        jsonObj.payload.settings != null &&
-        jsonObj.payload.settings.hasOwnProperty("cityName") &&
-        jsonObj.payload.settings.hasOwnProperty("unit") &&
-        jsonObj.payload.settings.hasOwnProperty("frequency") &&
-        jsonObj.payload.settings.hasOwnProperty("roundDegree")
-
-      ) {
-        cityName = jsonObj.payload.settings["cityName"].toLowerCase();
-        unit = jsonObj.payload.settings["unit"];
-        displayCity = jsonObj.payload.settings["displayCity"];
-        roundDegree = jsonObj.payload.settings["roundDegree"] === "true";
-        frequency =
-          jsonObj.payload.settings["frequency"] !== "0"
-            ? parseInt(jsonObj.payload.settings["frequency"])
-            : false;
-      }
-
-      if (cityName === "" || apiKey === "") {
-        const json = {
-          event: "showAlert",
-          context: jsonObj.context,
-        };
-        websocket.send(JSON.stringify(json));
-      } else {
-        sendRequest(context, cityName, displayCity, unit, roundDegree);
-        if (frequency) {
-          setInterval(
-            () => sendRequest(context, cityName, displayCity, unit, roundDegree),
-            frequency
-          );
-        }
-      }
+      getWeather(jsonObj, context)
     } else if (jsonObj["event"] === "didReceiveGlobalSettings") {
       if (
         jsonObj.payload.settings != null &&
@@ -76,16 +48,76 @@ function connectElgatoStreamDeckSocket(
       ) {
         apiKey = jsonObj.payload.settings["apiKey"];
         provider = jsonObj.payload.settings["provider"] || "weatherApi";
+        // Auto Fetch Weather when initialized.
+        if (buttons.length > 0) {
+          for (const button of buttons) {
+            // Check if button has settings
+            if (Object.keys(button.jsonObj.payload.settings).length > 0) {
+              getWeather(button.jsonObj, button.context)
+            }
+          }
+        }
       }
     } else if (jsonObj["event"] === "keyDown") {
-      const json = {
-        event: "getGlobalSettings",
-        context: pluginUUID,
-      };
-
-      websocket.send(JSON.stringify(json));
+      getGlobalSettings()
+    } else if (jsonObj["event"] === "didReceiveSettings") {
+      // Fetch weather on change
+      if (apiKey && provider) {
+        getWeather(jsonObj, context)
+      }
     }
   };
+}
+
+function getGlobalSettings () {
+  const json = {
+    event: "getGlobalSettings",
+    context: pluginUUID,
+  };
+
+  websocket.send(JSON.stringify(json));
+}
+
+function getWeather (jsonObj, context) {
+  let cityName = "";
+  let unit = "";
+  let displayCity = 0;
+  let roundDegree = true;
+  let frequency = null;
+
+  if (
+    jsonObj.payload.settings != null &&
+    jsonObj.payload.settings.hasOwnProperty("cityName") &&
+    jsonObj.payload.settings.hasOwnProperty("unit") &&
+    jsonObj.payload.settings.hasOwnProperty("frequency") &&
+    jsonObj.payload.settings.hasOwnProperty("roundDegree")
+
+  ) {
+    cityName = jsonObj.payload.settings["cityName"].toLowerCase();
+    unit = jsonObj.payload.settings["unit"];
+    displayCity = jsonObj.payload.settings["displayCity"];
+    roundDegree = jsonObj.payload.settings["roundDegree"] === "true";
+    frequency =
+      jsonObj.payload.settings["frequency"] !== "0"
+        ? parseInt(jsonObj.payload.settings["frequency"])
+        : false;
+  }
+
+  if (cityName === "" || apiKey === "") {
+    const json = {
+      event: "showAlert",
+      context: jsonObj.context,
+    };
+    websocket.send(JSON.stringify(json));
+  } else {
+    sendRequest(context, cityName, displayCity, unit, roundDegree);
+    if (frequency) {
+      setInterval(
+        () => sendRequest(context, cityName, displayCity, unit, roundDegree),
+        frequency
+      );
+    }
+  }
 }
 
 function prepareUrl(cityName, unit) {
@@ -108,19 +140,19 @@ function prepareTemperature(response, unit, roundDegree) {
     case "weatherApi":
       if (unit === "celsius") {
         temp = response.current.temp_c != null
-          ? response.current.temp_c.toFixed(roundDegree ? 0 : 2) + "°C" 
+          ? response.current.temp_c.toFixed(roundDegree ? 0 : 2) + "°C"
           : "NaN";
       }
       if (unit === "fahrenheit") {
         temp = response.current.temp_f != null
-          ? response.current.temp_f.toFixed(roundDegree ? 0 : 2) + "°F" 
+          ? response.current.temp_f.toFixed(roundDegree ? 0 : 2) + "°F"
           : "NaN";
       }
       break;
     case "openWeatherMap":
       if (unit === "celsius") {
         temp = response.main.temp != null
-          ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°C" 
+          ? response.main.temp.toFixed(roundDegree ? 0 : 2) + "°C"
           : "NaN";
       }
       if (unit === "fahrenheit") {
