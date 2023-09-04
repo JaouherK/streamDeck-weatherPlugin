@@ -114,7 +114,7 @@ function getProviderUrl() {
   let url;
   switch (provider) {
     case "weatherApi":
-      url = "weatherapi.com/my/";
+      url = "www.weatherapi.com/my/";
       break;
     case "openWeatherMap":
       url = "home.openweathermap.org/api_keys";
